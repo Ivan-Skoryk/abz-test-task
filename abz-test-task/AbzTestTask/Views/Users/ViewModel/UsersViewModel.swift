@@ -19,6 +19,7 @@ final class UsersViewModel: ObservableObject {
     @Published var state: UsersViewModelState = .idle
     @Published var users: [User] = []
     
+    // Function to fetch existing users
     func fetchUsers(refresh: Bool = false) async {
         DispatchQueue.main.async {
             self.state = .loading
@@ -28,7 +29,6 @@ final class UsersViewModel: ObservableObject {
         let response = await usersService.getUsers(page: page)
         switch response {
         case .success(let list):
-            print("users here")
             DispatchQueue.main.async {
                 self.state = page < list.totalPages ? .moreDataAvailable : .idle
                 if refresh {
@@ -43,6 +43,7 @@ final class UsersViewModel: ObservableObject {
         }
     }
     
+    // Fuction to reload users array from first page
     func refreshUsers() async {
         await fetchUsers(refresh: true)
     }

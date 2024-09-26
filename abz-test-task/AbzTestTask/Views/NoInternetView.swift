@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// View used to inform user that there is no internet connection
 struct NoInternetView: View {
     @Environment(\.dismiss) var dismiss
     

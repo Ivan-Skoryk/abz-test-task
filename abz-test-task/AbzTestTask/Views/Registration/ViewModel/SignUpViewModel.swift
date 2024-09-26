@@ -28,13 +28,13 @@ class SignUpViewModel: ObservableObject {
     var postSuccess = false
     var postMessage = ""
     
-    
     var isButtonDisabled: Bool {
         name.isEmpty && email.isEmpty && phone.isEmpty && photoData != nil
     }
     
+    // Function to fetch available positions
     func fetchPositions() async {
-        let result = await signUpService.getPosiions()
+        let result = await signUpService.getPositions()
         
         switch result {
         case .success(let list):
@@ -47,6 +47,7 @@ class SignUpViewModel: ObservableObject {
     }
     
     private var token = ""
+    // Function to get user token
     func getToken() async {
         let result = await signUpService.getToken()
         switch result {
@@ -57,6 +58,7 @@ class SignUpViewModel: ObservableObject {
         }
     }
     
+    // Function to post user data
     func postUser() async {
         guard validate() else { return }
         
@@ -102,6 +104,7 @@ class SignUpViewModel: ObservableObject {
         }
     }
     
+    // Function to validate user input
     private func validate() -> Bool {
         var isValidForm = true
         
@@ -128,6 +131,7 @@ class SignUpViewModel: ObservableObject {
         return isValidForm
     }
     
+    // Function to clear user input data
     func clearData() {
         name = ""
         email = ""
@@ -136,6 +140,7 @@ class SignUpViewModel: ObservableObject {
         selectedPosition = 1
     }
     
+    // Function to clear validation messages
     func clearValidation() {
         nameValidation = ""
         emailValidation = ""

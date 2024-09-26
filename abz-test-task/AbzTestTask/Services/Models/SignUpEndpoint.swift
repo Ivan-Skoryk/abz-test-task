@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// An enum representing the available API endpoints for user sign-up and token retrieval.
+///
+/// This enum conforms to the `APIEndpoint` protocol, providing implementations
+/// for the required properties based on the specific endpoint being accessed.
 enum SignUpEndpoint: APIEndpoint {
     case postUser(token: String, user: SignUpDTO)
     case getToken

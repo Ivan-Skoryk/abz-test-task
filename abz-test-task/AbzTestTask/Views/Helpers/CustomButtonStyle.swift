@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A custom button style that adjusts appearance based on the button state.
 struct CustomButtonStyle: ButtonStyle {
     var disabled = false
     

@@ -7,15 +7,16 @@
 
 import SwiftUI
 
+/// A custom text input field with supporting text and validation feedback.
 struct CustomTextInputField: View {
     var title: String
     var supportingText: String
     @Binding var text: String
     @Binding var validation: String
-    
-    @FocusState private var isFocused: Bool?
+
+    @FocusState private var isFocused: Bool?  // State for managing focus
     private var keyboardType: UIKeyboardType = .default
-    
+
     init(
         title: String,
         text: Binding<String>,
@@ -29,19 +30,19 @@ struct CustomTextInputField: View {
         self.supportingText = supportingText
         self.keyboardType = keyboardType
     }
-    
+
     private var titleColor: Color {
         validation.isEmpty ?
-        isFocused != nil && text.isEmpty ? .appBlue : .secondary :
+        (isFocused != nil && text.isEmpty ? .appBlue : .secondary) :
         .appErrorRed
     }
-    
+
     private var borderColor: Color {
         validation.isEmpty ?
-        isFocused != nil ? Color.appBlue : .secondary :
+        (isFocused != nil ? Color.appBlue : .secondary) :
         .appErrorRed
     }
-    
+
     var body: some View {
         ZStack(alignment: .leading) {
             // Title and placeholder
@@ -50,14 +51,14 @@ struct CustomTextInputField: View {
                 .foregroundColor(titleColor)
                 .offset(y: isFocused == nil && text.isEmpty ? 0 : -25)
                 .scaleEffect(isFocused == nil && text.isEmpty ? 1 : 0.66, anchor: .leading)
-            
-            //Supporting text and validation errors
+
+            // Supporting text and validation errors
             Text(validation.isEmpty ? supportingText : validation)
                 .offset(y: 40)
                 .font(.nunitoSans(size: 14))
                 .foregroundColor(validation.isEmpty ? .secondary : Color.appErrorRed)
-            
-            //Textfield
+
+            // TextField
             TextField("", text: $text)
                 .textFieldStyle(.plain)
                 .keyboardType(keyboardType)
@@ -71,7 +72,7 @@ struct CustomTextInputField: View {
         .padding(.horizontal, 16)
         .overlay {
             RoundedRectangle(cornerRadius: 4)
-                .stroke(borderColor,lineWidth: 1)
+                .stroke(borderColor, lineWidth: 1)
         }
         .animation(.default, value: text)
         .animation(.default, value: isFocused)

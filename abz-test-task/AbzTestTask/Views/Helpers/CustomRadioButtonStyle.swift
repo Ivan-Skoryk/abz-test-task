@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A custom radio button style that adjusts appearance based on the button state.
 struct CustomRadioButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

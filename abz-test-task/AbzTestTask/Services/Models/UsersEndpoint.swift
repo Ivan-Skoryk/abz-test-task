@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// An enum representing the available API endpoints for users list retrieval.
+///
+/// This enum conforms to the `APIEndpoint` protocol, providing implementations
+/// for the required properties based on the specific endpoint being accessed.
 enum UsersEndpoint: APIEndpoint {
     case getUsers(page: Int)
     

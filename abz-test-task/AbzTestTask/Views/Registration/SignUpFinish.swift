@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Last screen for user sign up flow
 struct SignUpFinish: View {
     @Environment(\.dismiss) var dismiss
     var success = true

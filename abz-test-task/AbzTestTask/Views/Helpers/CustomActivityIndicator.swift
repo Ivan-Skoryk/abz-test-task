@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A custom activity indicator view that displays a spinning progress indicator.
 struct CustomActivityIndicator: View {
     @State private var isAnimating = false
     

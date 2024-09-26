@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A SwiftUI wrapper for UIImagePickerController to select images.
 struct ImagePickerView: UIViewControllerRepresentable {
     @Binding var selectedImageData: Data?
     @Environment(\.dismiss) var dismiss
@@ -26,6 +27,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
     }
 }
 
+/// Coordinator to handle image picker delegate methods.
 class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     var picker: ImagePickerView
     
@@ -34,8 +36,12 @@ class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImageP
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let selecteImage = info[.originalImage] as? UIImage else { return }
-        self.picker.selectedImageData = selecteImage.jpegData(compressionQuality: 0.7)
+        guard let selectedImage = info[.originalImage] as? UIImage else { return }  // Get the selected image
+        self.picker.selectedImageData = selectedImage.jpegData(compressionQuality: 0.7)  // Store the image data
+        self.picker.dismiss()
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.picker.dismiss()
     }
 }

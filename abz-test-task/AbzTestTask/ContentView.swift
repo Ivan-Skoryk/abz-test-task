@@ -19,7 +19,7 @@ struct ContentView: View {
             tabbar
         }
         .background(.appBackground)
-        .fullScreenCover(isPresented: $monitor.isDiconnected, onDismiss: { monitor.checkConnection() }) {
+        .fullScreenCover(isPresented: $monitor.isDisconnected, onDismiss: { monitor.checkConnection() }) {
             NoInternetView()
         }
     }
