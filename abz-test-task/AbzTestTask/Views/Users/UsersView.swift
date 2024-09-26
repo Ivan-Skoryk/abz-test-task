@@ -7,63 +7,118 @@
 
 import SwiftUI
 
-struct User: Identifiable, Codable {
-    let id: Int
-    let name: String
-    let email: String
-    let phone: String
-    let position: String
-    let photoURL: String
+enum UsersViewModelState {
+    case loading
+    case moreDataAvailable
+    case idle
+}
+
+final class UsersViewModel: ObservableObject {
+    private let usersService = UsersService()
     
-    enum CodingKeys: String, CodingKey {
-        case id, name, email, phone, position
-        case photoURL = "photo"
+    @Published var state: UsersViewModelState = .idle
+    @Published var users: [User] = []
+    
+    func fetchUsers(refresh: Bool = false) async {
+        DispatchQueue.main.async {
+            self.state = .loading
+        }
+        
+        let page = refresh ? 1 : (users.count / 6) + 1
+        let response = await usersService.getUsers(page: page)
+        switch response {
+        case .success(let list):
+            print("users here")
+            DispatchQueue.main.async {
+                self.state = page < list.totalPages ? .moreDataAvailable : .idle
+                if refresh {
+                    self.users = list.users
+                } else {
+                    self.users += list.users
+                }
+            }
+        case .failure(let error):
+            print(error.localizedDescription)
+            break
+        }
+    }
+    
+    func refreshUsers() async {
+        await fetchUsers(refresh: true)
     }
 }
 
 struct UsersView: View {
-    
-    @State var isEmpty = false
-    
-    var users: [User] = [
-        User(id: 1,name: "User1", email: "email1@example.com", phone: "+3801112223341", position: "Sr.Ebla1", photoURL: ""),
-        User(id: 2,name: "User2", email: "email2@example.com", phone: "+3801112223342", position: "Sr.Ebla2", photoURL: ""),
-        User(id: 3,name: "User3", email: "email3@example.com", phone: "+3801112223343", position: "Sr.Ebla3", photoURL: ""),
-        User(id: 4,name: "User4", email: "email4@example.com", phone: "+3801112223344", position: "Sr.Ebla4", photoURL: ""),
-        User(id: 5,name: "User5", email: "email5@example.com", phone: "+3801112223345", position: "Sr.Ebla5", photoURL: ""),
-        User(id: 6,name: "User6", email: "email6@example.com", phone: "+3801112223346", position: "Sr.Ebla6", photoURL: ""),
-    ]
+    @StateObject private var viewModel = UsersViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
-            Text("Working with GET request")
-                .font(.system(size: 24))
-                .frame(maxWidth: .infinity, maxHeight: 56)
-                .background(.appYellow)
+            header
             
-            if !isEmpty {
-                List(users) { user in
-                    HStack(alignment: .top, spacing: 16) {
-                        Circle()
-                            .fill(.gray.opacity(0.3))
-                            .frame(width: 50, height: 50)
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(user.name)
-                                .font(.system(size: 24))
-                            Text(user.position)
-                                .foregroundColor(.gray)
-                            Text(user.email)
-                            Text(user.phone)
-                        }
-                        .font(.system(size: 20))
-                        .foregroundColor(.black)
-                    }
-                }
-                .listStyle(.plain)
+            if !viewModel.users.isEmpty {
+                usersList
             } else {
-                Spacer()
-                
+                emptyView
+            }
+        }
+    }
+    
+    private var header: some View {
+        Text("Working with GET request")
+            .font(.system(size: 24))
+            .frame(maxWidth: .infinity, maxHeight: 56)
+            .background(.appYellow)
+    }
+    
+    private var usersList: some View {
+        List {
+            ForEach(viewModel.users) { user in
+                HStack(alignment: .top, spacing: 16) {
+                    AsyncImage(url: URL(string: user.photoURL)) { image in
+                        image
+                            .resizable()
+                    } placeholder: {
+                        Color.gray.opacity(0.3)
+                    }
+                    .clipShape(Circle())
+                    .frame(width: 50, height: 50)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(user.name)
+                            .font(.system(size: 24))
+                        Text(user.position)
+                            .foregroundColor(.gray)
+                        Text(user.email)
+                        Text(user.phone)
+                    }
+                    .font(.system(size: 20))
+                    .foregroundColor(.black)
+                }
+            }
+            
+            switch viewModel.state {
+            case .loading:
+                CustomActivityIndicator()
+                    .frame(maxWidth: .infinity)
+            case .moreDataAvailable:
+                CustomActivityIndicator()
+                    .frame(maxWidth: .infinity)
+                    .onAppear {
+                        Task { await viewModel.fetchUsers() }
+                    }
+            case .idle:
+                EmptyView()
+            }
+        }
+        .listStyle(.plain)
+        .refreshable {
+            await viewModel.refreshUsers()
+        }
+    }
+    
+    private var emptyView: some View {
+        List {
+            VStack(spacing: 0) {
                 ZStack {
                     Circle()
                         .stroke(.black.opacity(0.87), lineWidth: 1)
@@ -76,13 +131,22 @@ struct UsersView: View {
                     
                 }
                 .frame(maxWidth: 300)
+                .padding(.top, 120)
                 
                 Text("There are no users yet")
                     .font(.system(size: 24))
                     .padding(16)
-                
-                Spacer()
             }
+            .frame(maxWidth: .infinity)
+            .listSectionSeparator(.hidden)
+            .listRowSeparator(.hidden)
+        }
+        .listStyle(.plain)
+        .task {
+            await viewModel.fetchUsers()
+        }
+        .refreshable {
+            await viewModel.refreshUsers()
         }
     }
 }

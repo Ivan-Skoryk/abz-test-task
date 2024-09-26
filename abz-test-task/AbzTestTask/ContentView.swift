@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var selectedTab = 0
+    @StateObject private var monitor = NetworkMonitor()
+    
+    @State private var selectedTab = 0
     
     var body: some View {
         VStack(spacing: 0) {
@@ -37,9 +39,12 @@ struct ContentView: View {
             .background(Color.appTabBarBackground)
         }
         .background(.appBackground)
+        .fullScreenCover(isPresented: $monitor.isDiconnected, onDismiss: { monitor.checkConnection() }) {
+            NoInternetView()
+        }
     }
     
-    func customTabView(icon: String, title: String, isActive: Bool) -> some View {
+    private func customTabView(icon: String, title: String, isActive: Bool) -> some View {
         HStack(spacing: 10) {
             Spacer()
             
