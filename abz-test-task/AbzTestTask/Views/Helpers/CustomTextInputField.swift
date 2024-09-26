@@ -13,42 +13,65 @@ struct CustomTextInputField: View {
     @Binding var text: String
     @Binding var validation: String
     
-    @FocusState var isFocused: Bool?
+    @FocusState private var isFocused: Bool?
+    private var keyboardType: UIKeyboardType = .default
     
-    init(title: String, text: Binding<String>, validation: Binding<String>, supportingText: String = "") {
+    init(
+        title: String,
+        text: Binding<String>,
+        validation: Binding<String>,
+        supportingText: String = "",
+        keyboardType: UIKeyboardType = .default
+    ) {
         self.title = title
         self._text = text
         self._validation = validation
         self.supportingText = supportingText
+        self.keyboardType = keyboardType
+    }
+    
+    private var titleColor: Color {
+        validation.isEmpty ?
+        isFocused != nil && text.isEmpty ? .appBlue : .secondary :
+        .appErrorRed
+    }
+    
+    private var borderColor: Color {
+        validation.isEmpty ?
+        isFocused != nil ? Color.appBlue : .secondary :
+        .appErrorRed
     }
     
     var body: some View {
         ZStack(alignment: .leading) {
             // Title and placeholder
             Text(title)
-                .font(.system(size: 24))
-                .foregroundColor(isFocused != nil && text.isEmpty ? Color.appBlue : .secondary)
+                .font(.nunitoSans(size: 20))
+                .foregroundColor(titleColor)
                 .offset(y: isFocused == nil && text.isEmpty ? 0 : -25)
                 .scaleEffect(isFocused == nil && text.isEmpty ? 1 : 0.66, anchor: .leading)
             
             //Supporting text and validation errors
             Text(validation.isEmpty ? supportingText : validation)
                 .offset(y: 40)
-                .font(.system(size: 16))
+                .font(.nunitoSans(size: 14))
                 .foregroundColor(validation.isEmpty ? .secondary : Color.appErrorRed)
             
             //Textfield
             TextField("", text: $text)
                 .textFieldStyle(.plain)
+                .keyboardType(keyboardType)
+                .autocorrectionDisabled(true)
+                .textInputAutocapitalization(.never)
                 .frame(height: 56)
-                .font(.system(size: 24))
+                .font(.nunitoSans(size: 20))
                 .baselineOffset(-6)
                 .focused($isFocused, equals: true)
         }
         .padding(.horizontal, 16)
         .overlay {
             RoundedRectangle(cornerRadius: 4)
-                .stroke(isFocused != nil ? Color.appBlue : .secondary, lineWidth: 1)
+                .stroke(borderColor,lineWidth: 1)
         }
         .animation(.default, value: text)
         .animation(.default, value: isFocused)

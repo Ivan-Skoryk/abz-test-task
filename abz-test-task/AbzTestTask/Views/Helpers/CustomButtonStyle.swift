@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct CustomButtonStyle: ButtonStyle {
+    var disabled = false
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding(.vertical, 12)
-            .padding(.horizontal, 24)
-            .background(configuration.isPressed ? .appButtonPressed : .appButton)
+            .frame(width: 140, height: 48)
+            .background(
+                disabled ?
+                    .appButtonDisabled :
+                    configuration.isPressed ? .appButtonPressed : .appButton
+            )
             .foregroundStyle(.black)
+            .font(.nunitoSans(size: 18))
             .clipShape(RoundedRectangle(cornerRadius: 24))
             .animation(.default, value: configuration.isPressed)
     }

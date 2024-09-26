@@ -24,6 +24,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4B4EC0F72CA5EDA5000CBF17 /* abz-test-task-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "abz-test-task-Info.plist"; sourceTree = "<group>"; };
 		4BA820332CA2CCF3008A4379 /* abz-test-task.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "abz-test-task.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BA820432CA2CCF4008A4379 /* abz-test-taskTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "abz-test-taskTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BA8204D2CA2CCF4008A4379 /* abz-test-taskUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "abz-test-taskUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +76,7 @@
 		4BA8202A2CA2CCF2008A4379 = {
 			isa = PBXGroup;
 			children = (
+				4B4EC0F72CA5EDA5000CBF17 /* abz-test-task-Info.plist */,
 				4BA820352CA2CCF3008A4379 /* AbzTestTask */,
 				4BA820462CA2CCF4008A4379 /* AbzTestTaskTests */,
 				4BA820502CA2CCF4008A4379 /* AbzTestTaskUITests */,
@@ -399,12 +401,15 @@
 				DEVELOPMENT_TEAM = 8T58NYZDRU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "abz-test-task-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Abz Test Task";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera to take photo for your user profile";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to take picture for your user profile";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -430,12 +435,15 @@
 				DEVELOPMENT_TEAM = 8T58NYZDRU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "abz-test-task-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Abz Test Task";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera to take photo for your user profile";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access to your photo library to take picture for your user profile";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

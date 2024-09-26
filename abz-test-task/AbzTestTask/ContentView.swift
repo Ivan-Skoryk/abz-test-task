@@ -14,34 +14,42 @@ struct ContentView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            TabView(selection: $selectedTab) {
-                UsersView()
-                    .tag(0)
-                
-                SignUpView()
-                    .tag(1)
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .toolbarBackground(.hidden, for: .tabBar)
+            tabView
             
-            ZStack {
-                HStack {
-                    ForEach(Tabs.allCases, id: \.self) { tab in
-                        Button {
-                            selectedTab = tab.rawValue
-                        } label: {
-                            customTabView(icon: tab.iconName, title: tab.title, isActive: selectedTab == tab.rawValue)
-                        }
-                    }
-                }
-                .padding(.vertical, 16)
-            }
-            .background(Color.appTabBarBackground)
+            tabbar
         }
         .background(.appBackground)
         .fullScreenCover(isPresented: $monitor.isDiconnected, onDismiss: { monitor.checkConnection() }) {
             NoInternetView()
         }
+    }
+    
+    private var tabView: some View {
+        TabView(selection: $selectedTab) {
+            UsersView()
+                .tag(0)
+            
+            SignUpView()
+                .tag(1)
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .toolbarBackground(.hidden, for: .tabBar)
+    }
+    
+    private var tabbar: some View {
+        ZStack {
+            HStack {
+                ForEach(Tabs.allCases, id: \.self) { tab in
+                    Button {
+                        selectedTab = tab.rawValue
+                    } label: {
+                        customTabView(icon: tab.iconName, title: tab.title, isActive: selectedTab == tab.rawValue)
+                    }
+                }
+            }
+            .padding(.vertical, 16)
+        }
+        .background(Color.appTabBarBackground)
     }
     
     private func customTabView(icon: String, title: String, isActive: Bool) -> some View {
@@ -56,7 +64,7 @@ struct ContentView: View {
                 .foregroundColor(isActive ? .appBlue: .black.opacity(0.6))
             
             Text(title)
-                .font(.system(size: 14))
+                .font(.nunitoSans(size: 16))
                 .foregroundColor(isActive ? .mint: .gray)
             
             Spacer()

@@ -5,6 +5,7 @@
 //  Created by Ivan Skoryk on 25.09.2024.
 //
 
+import Foundation
 
 struct User: Identifiable, Codable {
     let id: Int
@@ -17,5 +18,15 @@ struct User: Identifiable, Codable {
     enum CodingKeys: String, CodingKey {
         case id, name, email, phone, position
         case photoURL = "photo"
+    }
+}
+
+struct UsersList: Codable {
+    let totalPages: Int
+    let users: [User]
+    
+    enum CodingKeys: String, CodingKey {
+        case totalPages = "total_pages"
+        case users
     }
 }

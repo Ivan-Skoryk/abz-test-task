@@ -7,47 +7,6 @@
 
 import SwiftUI
 
-enum UsersViewModelState {
-    case loading
-    case moreDataAvailable
-    case idle
-}
-
-final class UsersViewModel: ObservableObject {
-    private let usersService = UsersService()
-    
-    @Published var state: UsersViewModelState = .idle
-    @Published var users: [User] = []
-    
-    func fetchUsers(refresh: Bool = false) async {
-        DispatchQueue.main.async {
-            self.state = .loading
-        }
-        
-        let page = refresh ? 1 : (users.count / 6) + 1
-        let response = await usersService.getUsers(page: page)
-        switch response {
-        case .success(let list):
-            print("users here")
-            DispatchQueue.main.async {
-                self.state = page < list.totalPages ? .moreDataAvailable : .idle
-                if refresh {
-                    self.users = list.users
-                } else {
-                    self.users += list.users
-                }
-            }
-        case .failure(let error):
-            print(error.localizedDescription)
-            break
-        }
-    }
-    
-    func refreshUsers() async {
-        await fetchUsers(refresh: true)
-    }
-}
-
 struct UsersView: View {
     @StateObject private var viewModel = UsersViewModel()
     
@@ -65,7 +24,7 @@ struct UsersView: View {
     
     private var header: some View {
         Text("Working with GET request")
-            .font(.system(size: 24))
+            .font(.nunitoSans(size: 20))
             .frame(maxWidth: .infinity, maxHeight: 56)
             .background(.appYellow)
     }
@@ -83,15 +42,19 @@ struct UsersView: View {
                     .clipShape(Circle())
                     .frame(width: 50, height: 50)
                     
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 0) {
                         Text(user.name)
-                            .font(.system(size: 24))
+                            .font(.nunitoSans(size: 18))
+                            .padding(.bottom, 4)
+                        
                         Text(user.position)
                             .foregroundColor(.gray)
+                            .padding(.bottom, 8)
+                        
                         Text(user.email)
                         Text(user.phone)
                     }
-                    .font(.system(size: 20))
+                    .font(.nunitoSans(size: 14))
                     .foregroundColor(.black)
                 }
             }
@@ -120,11 +83,7 @@ struct UsersView: View {
         List {
             VStack(spacing: 0) {
                 ZStack {
-                    Circle()
-                        .stroke(.black.opacity(0.87), lineWidth: 1)
-                    Circle()
-                        .foregroundStyle(.appElipseBackground)
-                    Image(systemName: "person.3.fill")
+                    Image("no-users")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundStyle(.appBlue)
@@ -134,7 +93,7 @@ struct UsersView: View {
                 .padding(.top, 120)
                 
                 Text("There are no users yet")
-                    .font(.system(size: 24))
+                    .font(.nunitoSans(size: 20))
                     .padding(16)
             }
             .frame(maxWidth: .infinity)
